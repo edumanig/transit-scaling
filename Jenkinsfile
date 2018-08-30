@@ -16,8 +16,17 @@ pipeline {
       }
     }
     stage('Stage2') {
-      steps {
-        addInfoBadge 'Transit Scaling - Stage1'
+      parallel {
+        stage('Stage2') {
+          steps {
+            addInfoBadge 'Transit Scaling - Stage1'
+          }
+        }
+        stage('build-transit-framework') {
+          steps {
+            build(job: 'colby-build-transit-framework', propagate: true, wait: true, quietPeriod: 20)
+          }
+        }
       }
     }
     stage('Stage3') {
@@ -38,6 +47,20 @@ pipeline {
     stage('Stage6') {
       steps {
         echo 'stage6'
+      }
+    }
+    stage('Stage7') {
+      parallel {
+        stage('Stage7') {
+          steps {
+            addBadge(icon: 'Stage7', text: 'Stage7')
+          }
+        }
+        stage('colby-build-transit-framework-DESTROY') {
+          steps {
+            build(job: 'colby-build-transit-framework-DESTROY', propagate: true, quietPeriod: 20, wait: true)
+          }
+        }
       }
     }
   }
