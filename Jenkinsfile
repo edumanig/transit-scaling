@@ -10,7 +10,7 @@ pipeline {
         }
         stage('cloudn') {
           steps {
-            build(job: 'Build CloudN', propagate: true, wait: true, quietPeriod: 10)
+            build(job: 'build-cloudn', propagate: true, wait: true, quietPeriod: 10)
           }
         }
       }
@@ -28,6 +28,16 @@ pipeline {
     stage('Stage4') {
       steps {
         addInfoBadge 'Transit Scaling - Stage3'
+      }
+    }
+    stage('Stage5') {
+      steps {
+        addInfoBadge 'Stage5'
+      }
+    }
+    stage('Stage6') {
+      steps {
+        echo 'stage6'
       }
     }
   }
